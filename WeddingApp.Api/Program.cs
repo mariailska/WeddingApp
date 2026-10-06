@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WeddingApp.Api.Data;
+using WeddingApp.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,8 @@ builder.Services.AddDbContext<WeddingDbContext>(options =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
+
+builder.Services.AddScoped<IInvitationService, InvitationService>();
 
 var app = builder.Build();
 

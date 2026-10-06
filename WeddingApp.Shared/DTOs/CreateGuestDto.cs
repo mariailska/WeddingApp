@@ -1,12 +1,12 @@
 using WeddingApp.Shared.Enums;
 
-namespace WeddingApp.Shared.DTO_s;
+namespace WeddingApp.Shared.DTOs;
 
-public class GuestDto
+public class CreateGuestDto
 {
-    public int? InvitationId { get; set; }
     public string? Name { get; set; }
     public AttendanceStatus Attendance { get; set; } =
         AttendanceStatus.Undetermined;
     public DietaryRequirement Diet { get; set; } = DietaryRequirement.Normal;
+
 }

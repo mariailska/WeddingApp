@@ -2,10 +2,8 @@ using WeddingApp.Shared.DTO_s;
 
 namespace WeddingApp.Shared.DTOs;
 
-public class InvitationDto
+public class CreateInvitationDto
 {
-    public string Token { get; set; } = string.Empty;
-
     public string DisplayName { get; set; } = string.Empty;
     
     public string? AccommodationDetails { get; set; }
@@ -13,4 +11,6 @@ public class InvitationDto
     public string? Notes { get; set; }
 
     public IEnumerable<GuestDto> Guests { get; set; } = new  List<GuestDto>();
+
+    
 }

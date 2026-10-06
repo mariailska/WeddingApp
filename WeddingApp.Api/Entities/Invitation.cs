@@ -1,3 +1,5 @@
+using WeddingApp.Shared.DTO_s;
+
 namespace WeddingApp.Api.Entities;
 
 public class Invitation
@@ -12,5 +14,5 @@ public class Invitation
 
     public string? Notes { get; set; } = string.Empty;
 
-    public List<Guest> Guests { get; set; } = new();
+    public IEnumerable<Guest> Guests { get; set; } = new List<Guest>();
 }

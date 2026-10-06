@@ -1,16 +1,10 @@
-using WeddingApp.Shared.DTO_s;
-
 namespace WeddingApp.Shared.DTOs;
 
-public class InvitationDto
+public class UpdateInvitationDto
 {
     public string Token { get; set; } = string.Empty;
-
     public string DisplayName { get; set; } = string.Empty;
-    
     public string? AccommodationDetails { get; set; }
-
     public string? Notes { get; set; }
-
-    public IEnumerable<GuestDto> Guests { get; set; } = new  List<GuestDto>();
+    public List<UpdateGuestDto> Guests { get; set; } = new(); 
 }
