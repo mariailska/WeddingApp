@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WeddingApp.Api.Services;
 using WeddingApp.Shared.DTOs;
@@ -25,6 +24,7 @@ public class InvitationController : ControllerBase
 
         if (invitation == null)
         {
+            _logger.LogInformation($"Invitation with Token {token} not found");
             return NotFound();
         }
 
