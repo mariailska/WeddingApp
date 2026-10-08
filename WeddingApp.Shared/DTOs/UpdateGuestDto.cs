@@ -5,8 +5,6 @@ namespace WeddingApp.Shared.DTOs;
 
 public class UpdateGuestDto
 {
-    public int? Id { get; set; } 
-
     [Required(ErrorMessage = "Guest name is required.")]
     [StringLength(100, MinimumLength = 2, ErrorMessage = "Name must be between 2 and 100 characters.")]
     public string Name { get; set; } = string.Empty;

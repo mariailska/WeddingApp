@@ -10,4 +10,16 @@ public class WeddingDbContext : DbContext
     public DbSet<Invitation> Invitations { get; set; } = null!;
     public DbSet<Guest> Guests { get; set; } = null!;
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<Guest>()
+            .Property(g => g.Attendance)
+            .HasConversion<string>();
+        
+        modelBuilder.Entity<Guest>()
+            .Property(g => g.Diet)
+            .HasConversion<string>();
+    }
+
 }
