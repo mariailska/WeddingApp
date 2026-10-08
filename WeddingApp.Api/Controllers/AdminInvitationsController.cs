@@ -39,4 +39,18 @@ public class AdminInvitationsController : ControllerBase
 
         return Ok(updatedInvitation);
     }
+
+    [HttpDelete("{token}")]
+    public async Task<IActionResult> DeleteInvitation(string token)
+    {
+        var isDeleted = await _invitationService.DeleteAsync(token);
+
+        if (!isDeleted)
+        {
+            _logger.LogWarning($"Attempted to delete non-existent invitation with Token: {token}");
+            return NotFound();
+        }
+
+        return NoContent();
+    }
 }
