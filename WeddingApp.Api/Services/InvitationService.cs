@@ -1,3 +1,6 @@
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Unicode;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using Npgsql;
@@ -12,11 +15,13 @@ public class InvitationService :  IInvitationService
 {
     private readonly WeddingDbContext _context;
     private readonly ILogger<InvitationService> _logger;
+    private readonly IEmailService _emailnotify;
 
-    public InvitationService(WeddingDbContext context, ILogger<InvitationService> logger)
+    public InvitationService(WeddingDbContext context, ILogger<InvitationService> logger, IEmailService emailnotify)
     {
         _context = context;
         _logger = logger;
+        _emailnotify = emailnotify;
     }
 
     public async Task<InvitationDto?> GetByTokenAsync(string token)
@@ -104,6 +109,27 @@ public class InvitationService :  IInvitationService
         }).ToList();
         
         await _context.SaveChangesAsync();
+        
+        var jsonOptions = new JsonSerializerOptions 
+        { 
+            WriteIndented = true,
+            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All) 
+        };
+        jsonOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+        var jsonString = JsonSerializer.Serialize(updateInvitationDto, jsonOptions);
+        
+        var messageBody = $@"
+Hej Maria! 
+
+Gość właśnie zaktualizował swoje zaproszenie.
+Token: {token}
+
+Zapisane dane:
+{jsonString}
+";
+        await _emailnotify.SendNotificationAsync(
+            subject: $"Aktualizacja zaproszenia: {updateInvitationDto.DisplayName}", 
+            message: messageBody);
         
         return new InvitationDto
         {

@@ -14,6 +14,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IInvitationService, InvitationService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 var app = builder.Build();
 
