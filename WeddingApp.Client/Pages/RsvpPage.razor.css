@@ -1,0 +1,125 @@
+.rsvp-container {
+    background-color: #fdfbf7; /* Ten sam ciepły krem co na okładce */
+    min-height: 100vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.back-button {
+    align-self: flex-start;
+    background: none;
+    border: none;
+    color: #6a7c49;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 20px;
+    padding: 10px 0;
+}
+
+.form-card {
+    background: white;
+    width: 100%;
+    max-width: 400px;
+    padding: 30px 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+.form-card h2 {
+    margin-top: 0;
+    color: #333;
+}
+
+.subtitle {
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.placeholder-box {
+    border: 1px dashed #ccc;
+    padding: 20px;
+    border-radius: 8px;
+    color: #999;
+}
+
+/* Dodaj do istniejących stylów: */
+
+.guest-section {
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+.guest-name {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.toggle-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.toggle-btn {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background: #fff;
+    border-radius: 8px;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* Stan aktywacji przycisków */
+.toggle-btn.active-yes {
+    background-color: #6a7c49; /* Zgaszona zieleń dla "Będę" */
+    color: white;
+    border-color: #6a7c49;
+}
+
+.toggle-btn.active-no {
+    background-color: #a55a5a; /* Zgaszona czerwień dla "Nie dotrę" */
+    color: white;
+    border-color: #a55a5a;
+}
+
+.diet-section {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 10px;
+    animation: slideDown 0.3s ease-out;
+}
+
+.diet-select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+.submit-button {
+    width: 100%;
+    padding: 15px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

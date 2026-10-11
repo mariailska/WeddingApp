@@ -1,0 +1,90 @@
+﻿@page "/z/{token}/rsvp"
+@layout Layout.EmptyLayout
+@using WeddingApp.Shared.Enums
+@inject WeddingApp.Client.Services.IInvitationService InvitationService
+@inject NavigationManager NavManager
+
+<div class="rsvp-container">
+    @if (isLoading)
+    {
+        <p class="loading-text">Ładowanie formularza...</p>
+    }
+    else if (invitation == null)
+    {
+        <p>Błąd ładowania danych.</p>
+    }
+    else
+    {
+        <button class="back-button" @onclick="GoBack">← Wróć do zaproszenia</button>
+        
+        <div class="form-card">
+            <h2>Potwierdzenie przybycia</h2>
+            <p class="subtitle">Szanowni @invitation.DisplayName</p>
+            
+            <!-- Lista gości przypisanych do zaproszenia -->
+            @if (invitation.Guests != null)
+            {
+                @foreach (var guest in invitation.Guests)
+                {
+                    <div class="guest-section">
+                        <h3 class="guest-name">@guest.Name</h3>
+                        
+                        <!-- Przyciski obecności -->
+                        <div class="toggle-group">
+                            <button class="toggle-btn @(guest.Attendance == AttendanceStatus.Present ? "active-yes" : "")"
+                                    @onclick="() => guest.Attendance = AttendanceStatus.Present">
+                                Będę z radością!
+                            </button>
+                            <button class="toggle-btn @(guest.Attendance == AttendanceStatus.NotPresent ? "active-no" : "")"
+                                    @onclick="() => guest.Attendance = AttendanceStatus.NotPresent">
+                                Niestety nie dotrę
+                            </button>
+                        </div>
+
+                        <!-- Rozwijana opcja diety, jeśli gość będzie obecny -->
+                        @if (guest.Attendance == AttendanceStatus.Present)
+                        {
+                            <div class="diet-section">
+                                <label>Wybierz preferencje kulinarne:</label>
+                                <select class="diet-select" @bind="guest.Diet">
+                                    <option value="@DietaryRequirement.Normal">Menu standardowe</option>
+                                    <option value="@DietaryRequirement.Vegetarian">Wegetariańskie</option>
+                                    <option value="@DietaryRequirement.Vegan">Wegańskie</option>
+                                    <option value="@DietaryRequirement.GlutenFree">Bezglutenowe</option>
+                                </select>
+                            </div>
+                        }
+                    </div>
+                }
+            }
+
+            <button class="submit-button" @onclick="SubmitRsvp">Wyślij potwierdzenie</button>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Token { get; set; } = string.Empty;
+
+    private WeddingApp.Shared.DTOs.InvitationDto? invitation;
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        invitation = await InvitationService.GetInvitationAsync(Token);
+        isLoading = false;
+    }
+
+    private void GoBack()
+    {
+        NavManager.NavigateTo($"/z/{Token}");
+    }
+
+    private async Task SubmitRsvp()
+    {
+        // Tutaj w przyszłości podepniemy wysyłkę do bazy:
+        // await InvitationService.UpdateRsvpAsync(Token, invitation);
+        Console.WriteLine("Zapisano RSVP!");
+    }
+}

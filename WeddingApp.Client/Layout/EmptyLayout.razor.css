@@ -1,0 +1,21 @@
+.mobile-app-wrapper {
+    display: flex;
+    justify-content: center;
+    background-color: #8C9DAD;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.mobile-container {
+    width: 100%;
+    max-width: 480px;
+    height: 100vh; /* Wymuszamy równe 100% ekranu, zero luzu */
+    background-color: #fdfbf7;
+
+    /* TO JEST KLUCZ DO ZABICIA MARGINESÓW: */
+    padding: 0 !important;
+    margin: 0 !important;
+    display: block;
+    overflow: hidden; /* Ucina wszystko, co wychodzi poza ramkę telefonu */
+}

@@ -1,42 +1,64 @@
 ﻿@page "/z/{token}"
-@layout Layout.FlowersLayout
+@layout Layout.EmptyLayout
 @inject WeddingApp.Client.Services.IInvitationService InvitationService
+@inject NavigationManager NavManager
 
-<div style="text-align: center; padding: 50px;">
-    @if (isLoading)
-    {
-        <p>Rozwijamy czerwony dywan... (trwa ładowanie)</p>
-    }
-    else if (invitation == null)
-    {
+@if (isLoading)
+{
+    <!-- Tymczasowy ekran ładowania -->
+    <div style="height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+        <p>Rozwijamy czerwony dywan...</p>
+    </div>
+}
+else if (invitation == null)
+{
+    <!-- Ekran błędu -->
+    <div style="height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column;">
         <h1>Błąd 404</h1>
         <p>Niestety, nie znaleźliśmy zaproszenia pod tym linkiem.</p>
-    }
-    else
-    {
-        <h1>Udało się!</h1>
-        <h2>Szanowni @invitation.DisplayName,</h2>
-        <p>To jest Wasze zaproszenie!</p>
-        <p>Twój token to: @Token</p>
-    }
-</div>
+    </div>
+}
+else
+{
+    <!-- WŁAŚCIWE ZAPROSZENIE (bez żadnych zewnętrznych marginesów) -->
+    <div class="snap-container">
+        
+        <!-- SEKCJA 1: OKŁADKA -->
+        <section class="hero-section">
+            <div class="overlay-box">
+                <h1>Marysia i Bartek</h1>
+                <p>Bierzemy ślub!</p>
+                <p class="date">DATA ŚLUBU</p>
+            </div>
+            <div class="scroll-arrow">↓</div>
+        </section>
+
+        <!-- SEKCJA 2: TREŚĆ Z KWIATAMI -->
+        <section class="invitation-content">
+            <h2>Szanowni @invitation.DisplayName,</h2>
+            <p>Z radością zapraszamy Was na naszą uroczystość!</p>
+            <button class="rsvp-button" @onclick="GoToRsvp">Wypełnij formularz</button>
+        </section>
+        
+    </div>
+}
 
 @code {
     [Parameter]
     public string Token { get; set; } = string.Empty;
 
-    // Zmienne przechowujące stan strony
     private WeddingApp.Shared.DTOs.InvitationDto? invitation;
     private bool isLoading = true;
 
-    // Metoda uruchamiana automatycznie przy wejściu na stronę
     protected override async Task OnInitializedAsync()
     {
         isLoading = true;
-        
-        // Pobieramy dane z API używając naszego serwisu
         invitation = await InvitationService.GetInvitationAsync(Token);
-        
         isLoading = false;
+    }
+    
+    private void GoToRsvp()
+    {
+        NavManager.NavigateTo($"/z/{Token}/rsvp");
     }
 }
