@@ -1,0 +1,42 @@
+﻿@page "/z/{token}"
+@layout Layout.FlowersLayout
+@inject WeddingApp.Client.Services.IInvitationService InvitationService
+
+<div style="text-align: center; padding: 50px;">
+    @if (isLoading)
+    {
+        <p>Rozwijamy czerwony dywan... (trwa ładowanie)</p>
+    }
+    else if (invitation == null)
+    {
+        <h1>Błąd 404</h1>
+        <p>Niestety, nie znaleźliśmy zaproszenia pod tym linkiem.</p>
+    }
+    else
+    {
+        <h1>Udało się!</h1>
+        <h2>Szanowni @invitation.DisplayName,</h2>
+        <p>To jest Wasze zaproszenie!</p>
+        <p>Twój token to: @Token</p>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Token { get; set; } = string.Empty;
+
+    // Zmienne przechowujące stan strony
+    private WeddingApp.Shared.DTOs.InvitationDto? invitation;
+    private bool isLoading = true;
+
+    // Metoda uruchamiana automatycznie przy wejściu na stronę
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+        
+        // Pobieramy dane z API używając naszego serwisu
+        invitation = await InvitationService.GetInvitationAsync(Token);
+        
+        isLoading = false;
+    }
+}
