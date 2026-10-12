@@ -1,10 +1,20 @@
 .rsvp-container {
-    background-color: #fdfbf7; /* Ten sam ciepły krem co na okładce */
-    min-height: 100vh;
+    background-color: #fdfbf7;
+    height: 100vh; 
+    overflow-y: auto;          /* Włączamy wewnętrzne przewijanie w pionie */
     padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    box-sizing: border-box;    /* Sprawia, że padding nie powiększa nam kontenera */
+
+    /* Ukrycie paska przewijania, żeby nadal wyglądało jak natywna aplikacja mobilna */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.rsvp-container::-webkit-scrollbar {
+    display: none;
 }
 
 .back-button {
@@ -122,4 +132,67 @@
 @keyframes slideDown {
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+/* Style dla pola z uwagami */
+.notes-section {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    text-align: left;
+    border-top: 1px dashed #eee;
+    padding-top: 20px;
+}
+
+.notes-section label {
+    font-weight: bold;
+    color: #333;
+    display: block;
+}
+
+.notes-hint {
+    font-size: 0.85rem;
+    color: #888;
+    margin-top: 3px;
+    margin-bottom: 10px;
+}
+
+.notes-input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-family: inherit;
+    font-size: 1rem;
+    resize: vertical; /* Pozwala powiększyć pole tekstowe tylko w pionie */
+    box-sizing: border-box;
+}
+
+.notes-input:focus {
+    outline: none;
+    border-color: #6a7c49;
+    box-shadow: 0 0 5px rgba(106, 124, 73, 0.3);
+}
+
+/* Stan ładowania i błędu */
+.submit-button:disabled {
+    background-color: #999;
+    cursor: not-allowed;
+}
+
+.error-text {
+    color: #a55a5a;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.success-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 250px;
+}
+
+.success-card h2 {
+    color: #6a7c49;
 }

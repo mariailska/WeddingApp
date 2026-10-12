@@ -5,7 +5,7 @@ using WeddingApp.Shared.DTOs;
 namespace WeddingApp.Api.Controllers;
 
 [ApiController]
-[Route("api/invitations")]
+[Route("api/z")]
 public class InvitationController : ControllerBase
 {
     private readonly ILogger<InvitationController> _logger;

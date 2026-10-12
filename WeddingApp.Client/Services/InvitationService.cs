@@ -14,7 +14,7 @@ public class InvitationService : IInvitationService
 
     public async Task<InvitationDto?> GetInvitationAsync(string token)
     {
-        var path = $"api/invitations/{token}";
+        var path = $"api/z/{token}";
 
         try
         {
@@ -29,9 +29,9 @@ public class InvitationService : IInvitationService
 
     public async Task<bool> UpdateInvitationAsync(string token, UpdateInvitationDto updateInvitationDto)
     {
-        var path = $"api/invitations/{token}";
+        var path = $"api/admin/z/{token}";
         HttpResponseMessage response = await _httpClient.PutAsJsonAsync(path, updateInvitationDto);
-        
+        response.EnsureSuccessStatusCode();
         return response.IsSuccessStatusCode;
     }
 }

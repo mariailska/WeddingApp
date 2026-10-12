@@ -5,7 +5,7 @@ using WeddingApp.Shared.DTOs;
 namespace WeddingApp.Api.Controllers;
 
 [ApiController]
-[Route("api/admin/invitations")]
+[Route("api/admin/z")]
 public class AdminInvitationsController : ControllerBase
 {
     private readonly ILogger<AdminInvitationsController> _logger;
@@ -23,7 +23,7 @@ public class AdminInvitationsController : ControllerBase
         
         var createdInvitation = await _invitationService.CreateAsync(createInvitationDto);
         
-        return Created($"/api/invitations/{createdInvitation.Token}", createdInvitation);
+        return Created($"/api/z/{createdInvitation.Token}", createdInvitation);
     }
 
     [HttpPut("{token}")]

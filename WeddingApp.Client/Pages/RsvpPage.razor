@@ -1,6 +1,7 @@
 ﻿@page "/z/{token}/rsvp"
 @layout Layout.EmptyLayout
 @using WeddingApp.Shared.Enums
+@using WeddingApp.Shared.DTOs
 @inject WeddingApp.Client.Services.IInvitationService InvitationService
 @inject NavigationManager NavManager
 
@@ -13,6 +14,14 @@
     {
         <p>Błąd ładowania danych.</p>
     }
+    else if (submitSuccess)
+    {
+        <div class="form-card success-card">
+            <h2>Dziękujemy! 🤍</h2>
+            <p>Wasza odpowiedź została pomyślnie zapisana.</p>
+            <button class="submit-button" @onclick="GoBack">Wróć do zaproszenia</button>
+        </div>
+    }
     else
     {
         <button class="back-button" @onclick="GoBack">← Wróć do zaproszenia</button>
@@ -21,7 +30,6 @@
             <h2>Potwierdzenie przybycia</h2>
             <p class="subtitle">Szanowni @invitation.DisplayName</p>
             
-            <!-- Lista gości przypisanych do zaproszenia -->
             @if (invitation.Guests != null)
             {
                 @foreach (var guest in invitation.Guests)
@@ -29,7 +37,6 @@
                     <div class="guest-section">
                         <h3 class="guest-name">@guest.Name</h3>
                         
-                        <!-- Przyciski obecności -->
                         <div class="toggle-group">
                             <button class="toggle-btn @(guest.Attendance == AttendanceStatus.Present ? "active-yes" : "")"
                                     @onclick="() => guest.Attendance = AttendanceStatus.Present">
@@ -41,7 +48,6 @@
                             </button>
                         </div>
 
-                        <!-- Rozwijana opcja diety, jeśli gość będzie obecny -->
                         @if (guest.Attendance == AttendanceStatus.Present)
                         {
                             <div class="diet-section">
@@ -58,7 +64,21 @@
                 }
             }
 
-            <button class="submit-button" @onclick="SubmitRsvp">Wyślij potwierdzenie</button>
+            <!-- POLE TEKSTOWE NA UWAGI -->
+            <div class="notes-section">
+                <label for="notes">Dodatkowe informacje dla nas (opcjonalnie):</label>
+                <p class="notes-hint">Potrzeba noclegu, alergie, pytania...</p>
+                <textarea id="notes" class="notes-input" @bind="invitation.Notes" rows="3" placeholder="Napisz tutaj..."></textarea>
+            </div>
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <p class="error-text">@errorMessage</p>
+            }
+
+            <button class="submit-button" disabled="@isSubmitting" @onclick="SubmitRsvp">
+                @(isSubmitting ? "Zapisywanie..." : "Wyślij potwierdzenie")
+            </button>
         </div>
     }
 </div>
@@ -67,8 +87,11 @@
     [Parameter]
     public string Token { get; set; } = string.Empty;
 
-    private WeddingApp.Shared.DTOs.InvitationDto? invitation;
+    private InvitationDto? invitation;
     private bool isLoading = true;
+    private bool isSubmitting = false;
+    private bool submitSuccess = false;
+    private string? errorMessage;
 
     protected override async Task OnInitializedAsync()
     {
@@ -83,8 +106,38 @@
 
     private async Task SubmitRsvp()
     {
-        // Tutaj w przyszłości podepniemy wysyłkę do bazy:
-        // await InvitationService.UpdateRsvpAsync(Token, invitation);
-        Console.WriteLine("Zapisano RSVP!");
+        if (invitation == null) return;
+
+        isSubmitting = true;
+        errorMessage = null;
+
+        try
+        {
+            var updateDto = new UpdateInvitationDto
+            {
+                DisplayName = invitation.DisplayName,
+                AccommodationDetails = invitation.AccommodationDetails, 
+                Notes = invitation.Notes,
+                Guests = invitation.Guests.Select(g => new UpdateGuestDto
+                {
+                    Name = $"{g.Name}",
+                    Attendance = g.Attendance,
+                    Diet = g.Diet
+                }).ToList()
+            };
+            
+            await InvitationService.UpdateInvitationAsync(Token, updateDto);
+            
+            submitSuccess = true;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Wystąpił błąd podczas zapisywania. Spróbuj ponownie lub skontaktuj się z nami.";
+            Console.WriteLine($"Błąd zapisu RSVP: {ex.Message}");
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
     }
 }
